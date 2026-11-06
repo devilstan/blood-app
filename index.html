@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7f4">
+  <title>血壓日誌</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html" aria-label="血壓日誌首頁"><span class="brand-mark">+</span><span>血壓日誌</span></a>
+      <span class="topbar-label"><span class="status-dot"></span> 個人健康紀錄</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">BLOOD PRESSURE JOURNAL</p>
+        <h1>血壓紀錄</h1>
+        <p class="subtitle">記下每一次測量，掌握自己的健康變化。</p>
+      </div>
+      <div class="record-count"><span>目前紀錄</span><strong id="record-count">0 <small>筆</small></strong></div>
+    </div>
+
+    <div class="workspace">
+      <section class="entry-section" aria-labelledby="entry-title">
+        <div class="section-heading">
+          <div><p class="section-index">01 / NEW ENTRY</p><h2 id="entry-title">新增測量</h2></div>
+          <span class="heading-symbol" aria-hidden="true">+</span>
+        </div>
+        <form id="pressure-form">
+          <div class="field-grid">
+            <label class="field" for="systolic"><span>收縮壓 <em>必填</em></span><div class="input-wrap"><input id="systolic" name="systolic" type="number" min="1" max="300" step="1" placeholder="120" required><span>mmHg</span></div></label>
+            <label class="field" for="diastolic"><span>舒張壓 <em>必填</em></span><div class="input-wrap"><input id="diastolic" name="diastolic" type="number" min="1" max="300" step="1" placeholder="80" required><span>mmHg</span></div></label>
+            <label class="field field-wide" for="pulse"><span>脈搏 <em>必填</em></span><div class="input-wrap"><input id="pulse" name="pulse" type="number" min="1" max="300" step="1" placeholder="70" required><span>次 / 分</span></div></label>
+            <label class="field field-wide" for="medication"><span>藥物治療</span><select id="medication" name="medication"><option value="無">無</option><option value="已服藥">已服藥</option><option value="未服藥">未服藥</option></select></label>
+            <label class="field field-wide" for="note"><span>備註 <em>選填</em></span><textarea id="note" name="note" rows="3" maxlength="500" placeholder="例如：飯後、運動後"></textarea></label>
+          </div>
+          <button class="save-button" type="submit"><span aria-hidden="true">＋</span> 儲存紀錄</button>
+          <p class="form-hint">日期與時間將於儲存時自動記錄</p>
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="history-section" aria-labelledby="history-title">
+        <div class="section-heading history-heading">
+          <div><p class="section-index">02 / HISTORY</p><h2 id="history-title">測量紀錄</h2></div>
+          <span class="history-order">最新在前</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">日期 / 時間</th><th scope="col">血壓 <span>mmHg</span></th><th scope="col">脈搏</th><th scope="col">藥物治療</th><th scope="col">備註</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead>
+            <tbody id="records"></tbody>
+          </table>
+        </div>
+        <div id="empty-state" class="empty-state"><div class="empty-icon" aria-hidden="true">＋</div><p>還沒有測量紀錄</p><span>新增一筆紀錄，開始追蹤血壓。</span></div>
+      </section>
+    </div>
+    <footer>血壓日誌 <span>·</span> 資料儲存於此瀏覽器</footer>
+  </main>
+</body>
+</html>
