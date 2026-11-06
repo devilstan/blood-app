@@ -4,8 +4,57 @@ const recordsBody = document.querySelector('#records');
 const emptyState = document.querySelector('#empty-state');
 const recordCount = document.querySelector('#record-count');
 const message = document.querySelector('#form-message');
+const themeToggle = document.querySelector('#theme-toggle');
+const themeMessage = document.querySelector('#theme-message');
+const themeColor = document.querySelector('meta[name="theme-color"]');
+const themeStorageKey = 'blood-pressure-theme';
+const systemTheme = typeof window.matchMedia === 'function'
+  ? window.matchMedia('(prefers-color-scheme: dark)')
+  : null;
 
 let records = [];
+let hasManualTheme = false;
+
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.documentElement.dataset.theme = theme;
+  themeToggle.setAttribute('aria-pressed', String(isDark));
+  themeToggle.setAttribute('aria-label', `目前為${isDark ? '深色' : '淺色'}主題，切換為${isDark ? '淺色' : '深色'}主題`);
+  themeColor.setAttribute('content', isDark ? '#1b211f' : '#f6f7f4');
+}
+
+try {
+  const savedTheme = localStorage.getItem(themeStorageKey);
+  hasManualTheme = savedTheme === 'dark' || savedTheme === 'light';
+} catch (error) {
+  // The switch remains usable for this page even when preference storage is blocked.
+}
+
+applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+themeToggle.addEventListener('click', () => {
+  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  hasManualTheme = true;
+  applyTheme(nextTheme);
+
+  try {
+    localStorage.setItem(themeStorageKey, nextTheme);
+    themeMessage.textContent = '';
+  } catch (error) {
+    themeMessage.textContent = '主題選擇可能無法保留，請檢查瀏覽器的儲存設定。';
+  }
+});
+
+function followSystemTheme(event) {
+  if (!hasManualTheme) applyTheme(event.matches ? 'dark' : 'light');
+}
+
+if (systemTheme && systemTheme.addEventListener) {
+  systemTheme.addEventListener('change', followSystemTheme);
+} else if (systemTheme) {
+  systemTheme.addListener(followSystemTheme);
+}
+
 try {
   const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
   if (Array.isArray(saved)) records = saved;

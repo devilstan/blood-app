@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6f7f4">
   <title>血壓日誌</title>
+  <script>
+    (() => {
+      let savedTheme;
+      try {
+        savedTheme = localStorage.getItem('blood-pressure-theme');
+      } catch (error) {
+        savedTheme = null;
+      }
+      const prefersDark = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = savedTheme === 'dark' || savedTheme === 'light'
+        ? savedTheme
+        : prefersDark ? 'dark' : 'light';
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
@@ -12,9 +26,16 @@
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="./index.html" aria-label="血壓日誌首頁"><span class="brand-mark">+</span><span>血壓日誌</span></a>
-      <span class="topbar-label"><span class="status-dot"></span> 個人健康紀錄</span>
+      <div class="topbar-actions">
+        <span class="topbar-label"><span class="status-dot"></span> 個人健康紀錄</span>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切換主題" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true"></span>
+          <span class="sr-only">切換淺色與深色主題</span>
+        </button>
+      </div>
     </div>
   </header>
+  <p id="theme-message" class="theme-message" role="status" aria-live="polite"></p>
 
   <main class="page">
     <div class="page-heading">
